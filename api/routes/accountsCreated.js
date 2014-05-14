@@ -227,10 +227,11 @@ function accountsCreated(params, callback) {
         response.total   = rows ? rows.length : 0;
         response.results = [];
         rows.forEach(function(row){
+          var txHash = row.key.pop();
           response.results.push({
             time        : moment.utc(row.key).format(),
             account     : row.value[0],
-            txHash      : row.value[1],
+            txHash      : txHash,
             ledgerIndex : parseInt(row.id, 10)
           });
         });
@@ -259,10 +260,11 @@ function accountsCreated(params, callback) {
       if (viewOpts.reduce === false) {        
         data.push(["time","account","txHash","ledgerIndex"]);
         rows.forEach(function(row){
+          var txHash = row.key.pop();
           data.push([
             moment.utc(row.key).format(),
             row.value[0],
-            row.value[1],
+            txHash,
             parseInt(row.id, 10)         
           ]); 
         });       
