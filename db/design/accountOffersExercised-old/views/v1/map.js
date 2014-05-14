@@ -64,7 +64,7 @@ function(doc) {
         }
       }
       
-      emit([tx.Account].concat(timestamp).concat([tx.hash]), [
+      emit([tx.Account].concat(timestamp), [
         pay.currency, 
         pay.issuer, 
         pay.value, 
@@ -74,10 +74,11 @@ function(doc) {
         "buy", //account is buying the base (1st) currency
         exchangeRate,
         counterparty,
-        unix
+        unix,
+        tx.hash
       ]);
         
-      emit([counterparty].concat(timestamp).concat([tx.hash]), [
+      emit([counterparty].concat(timestamp), [
         get.currency,
         get.issuer,
         get.value,
@@ -87,7 +88,8 @@ function(doc) {
         "sell",  //account is selling the base (1st) currency
         (1 / exchangeRate),
         tx.Account,
-        unix
+        unix,
+        tx.hash
       ]); 
          
     });

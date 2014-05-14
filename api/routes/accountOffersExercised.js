@@ -116,7 +116,7 @@ var winston = require('winston'),
   curl -H "Content-Type: application/json" -X POST -d '{
     "account" : "r3kmLJN5D28dHuH8vZNUZpMC43pEHpaocV",
     "format" : "json",
-    "startTime" : "jan 1, 2014 10:00 am",
+    "startTime" : "jan 1, 2013 10:00 am",
     "endTime"   : "jan 10, 2015 10:00 am"
     
   }' http://localhost:5993/api/accountOffersExercised
@@ -236,7 +236,7 @@ function accountOffersExercised (params, callback) {
             rate         : d.value[7],
             counterparty : d.value[8],
             time         : moment.utc(d.value[9]).format(),
-            txHash      : d.value[10],
+            txHash      : d.key.pop(),
             ledgerIndex : parseInt(d.id, 10)
           });
         });
@@ -259,8 +259,9 @@ function accountOffersExercised (params, callback) {
       
       if (viewOpts.reduce === false) {
         for (var i=0; i<rows.length; i++) {
-          rows[i].value[9]  = moment.utc(rows[i].value[9]).format(), 
-          rows[i].value[11] = parseInt(rows[i].id, 10) //ledger_index
+          rows[i].value[9]  = moment.utc(rows[i].value[9]).format();
+          rows[i].value[10] = d.key.pop() //txHash
+          rows[i].value[11] = parseInt(rows[i].id, 10); //ledger_index
           rows[i] = rows[i].value;
         }        
         
