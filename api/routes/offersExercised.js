@@ -28,7 +28,9 @@ var winston = require('winston'),
   curl -H "Content-Type: application/json" -X POST -d '{
     "base"  : {"currency": "XRP"},
     "counter" : {"currency": "USD", "issuer" : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
-    "limit" : 1,
+    "startTime" : "May 13, 2014 12:00",
+    "endTime"   : "Mar 15, 2014 12:00",
+    "limit" : 10,
     "reduce" : false,
     "format"        : "csv"
       
@@ -119,7 +121,7 @@ function offersExercised (params, callback, unlimit) {
       return handleCouchResponse(null, {rows:[]}); 
     } else {
 
-      db.view("offersExercisedV2", "v2", view, function (error, couchRes){
+      db.view("offersExercised", "v2", view, function (error, couchRes){
     
         if (error) return callback ('CouchDB - ' + error);       
         handleCouchResponse(couchRes.rows);
@@ -140,7 +142,8 @@ function offersExercised (params, callback, unlimit) {
     if (options.view.reduce === false) {
       rows.push(['time','price','baseAmount','counterAmount','account','counterparty','tx_hash']);
       resRows.forEach(function(row){
-        var time = row.key ? row.key.slice(1) : row.value[5];
+
+        var time = row.key ? row.key.slice(1,7) : row.value[5];
         rows.push([
           moment.utc(time).format(),
           row.value[2],         //price
@@ -148,7 +151,7 @@ function offersExercised (params, callback, unlimit) {
           row.value[0],         //pay amount
           row.value[3],         //account
           row.value[4],         //counterparty
-          row.value[6],         //tx hash
+          row.key.slice(7),     //tx hash
           parseInt(row.id, 10)  //ledger index
         ]);  
       });
@@ -159,8 +162,9 @@ function offersExercised (params, callback, unlimit) {
       else {
           
         resRows.forEach(function(row){
+
           //row.key will be null if this is reduced to a single row
-          var startTime = row.key ? row.key.slice(1) : options.startTime;
+          var startTime = row.key ? row.key.slice(1,7) : options.startTime;
 
           rows.push([
             moment.utc(startTime).format(), //start time
@@ -300,7 +304,7 @@ function offersExercised (params, callback, unlimit) {
   function cacheResults(rows) {
     
     var key   = parseKey(options)+":points";
-    var start = options.subview ? options.subview.startkey.slice(1) : options.alignedFirst;
+    var start = options.subview ? options.subview.startkey.slice(1,7) : options.alignedFirst;
     
     //we dont cache unreduced or completely reduced results
     if (options.view.reduce===false || !options.view.group_level) {

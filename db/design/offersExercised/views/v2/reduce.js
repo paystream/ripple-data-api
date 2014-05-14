@@ -4,7 +4,7 @@ function( keys, values, rereduce ) {
 
   if ( !rereduce ) {
 
-    var firstTime = values[0][3], //unix timestamp
+    var firstTime = values[0][5], //unix timestamp
       firstPrice  = values[0][2]; //exchange rate
 
     // initial values
@@ -25,8 +25,8 @@ function( keys, values, rereduce ) {
 
     values.forEach( function( trade, index ) {
 
-      var time = trade[3],
-        price  = trade[2];
+      var time = trade[5], //unix timestamp
+        price  = trade[2]; //exchange rate
 
       if (time<stats.openTime) {
         stats.openTime = time;
