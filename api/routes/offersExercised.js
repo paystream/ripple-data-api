@@ -151,7 +151,7 @@ function offersExercised (params, callback, unlimit) {
           row.value[0],         //pay amount
           row.value[3],         //account
           row.value[4],         //counterparty
-          row.key.slice(7),     //tx hash
+          row.key.pop(),     //tx hash
           parseInt(row.id, 10)  //ledger index
         ]);  
       });
