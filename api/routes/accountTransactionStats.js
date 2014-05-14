@@ -70,7 +70,7 @@ var winston = require('winston'),
   }' http://localhost:5993/api/accountTransactionStats
       
   curl -H "Content-Type: application/json" -X POST -d '{
-    "account" : "rrpNnNLKrartuEqfJGpqyDwPj1AFPg9vn1",
+    "account" : "r3kmLJN5D28dHuH8vZNUZpMC43pEHpaocV",
     "reduce" : false
     
   }' http://localhost:5993/api/accountTransactionStats
@@ -152,10 +152,11 @@ function transactionStats(params, callback) {
       if (viewOpts.reduce === false) {
     
         rows.forEach(function(d){
+          var txHash = d.key.pop();
           apiRes.results.push({
-            time        : moment.utc(d.value[1]).format(),
+            time        : moment.utc(d.key.slice(1)).format(),
             type        : d.value[0],
-            txHash      : d.value[2],
+            txHash      : txHash,
             ledgerIndex : parseInt(d.id, 10)
           });
         });
@@ -179,16 +180,18 @@ function transactionStats(params, callback) {
         data.push(["time","type","txHash","ledgerIndex"]);
         
         for (var i=0; i<rows.length; i++) {
+          var txHash = rows[i].key.pop();
           data.push([
-            moment.utc(rows[i].value[1]).format(), 
+            moment.utc(rows[i].key.slice(1)).format(), 
             rows[i].value[0], //type
-            rows[i].value[2], //tx_hash
+            txHash, //tx_hash
             parseInt(rows[i].id, 10) //ledger_index
           ]);
         }
         
       } else {
         
+        console.log(rows);
         rows.forEach(function(row){
 
           for (var key in row.value) {
