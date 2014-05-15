@@ -2,26 +2,27 @@ function( doc ) {
 
   var time    = new Date( doc.close_time_timestamp ),
     unix      = Math.round(time.getTime()),
-    timestamp = [ 
-      time.getUTCFullYear(), time.getUTCMonth(), time.getUTCDate(),
-      time.getUTCHours(), time.getUTCMinutes(), time.getUTCSeconds()
+    timestamp = [ time.getUTCFullYear( ), time.getUTCMonth( ), time.getUTCDate( ),
+      time.getUTCHours( ), time.getUTCMinutes( ), time.getUTCSeconds( )
     ];
 
-  doc.transactions.forEach(function(tx) {
+  doc.transactions.forEach( function( tx ) {
 
-    if (tx.metaData.TransactionResult !== 'tesSUCCESS') {
+    if ( tx.metaData.TransactionResult !== 'tesSUCCESS' ) {
       return;
     }
 
-    if (tx.TransactionType !== 'OfferCreate' && tx.TransactionType !== 'OfferCancel') {
+    if ( tx.TransactionType !== 'OfferCreate' && tx.TransactionType !== 'OfferCancel' ) {
       return;
     }
+    
+    //emit(timestamp, [tx.TransactionType, tx.Account, tx.hash]);
 
-    tx.metaData.AffectedNodes.forEach(function(affNode) {
+    tx.metaData.AffectedNodes.forEach( function( affNode ) {
 
       var node = affNode.CreatedNode || affNode.DeletedNode;
 
-      if (!node || node.LedgerEntryType !== 'Offer') {
+      if ( !node || node.LedgerEntryType !== 'Offer' ) {
         return;
       }
 
@@ -54,9 +55,9 @@ function( doc ) {
         exchangeRate = exchangeRate / 1000000.0;
       }
       
-      emit([payCurr+":"+getCurr].concat(timestamp).concat(tx.hash), [tx.TransactionType, tx.Account, payAmnt, getAmnt, exchangeRate,     unix]);
-      emit([getCurr+":"+payCurr].concat(timestamp).concat(tx.hash), [tx.TransactionType, tx.Account, getAmnt, payAmnt, 1 / exchangeRate, unix]);
+      emit( [ payCurr+":"+getCurr ].concat( timestamp ), [ tx.TransactionType, tx.Account, payAmnt, getAmnt, exchangeRate,     unix, tx.hash] );
+      emit( [ getCurr+":"+payCurr ].concat( timestamp ), [ tx.TransactionType, tx.Account, getAmnt, payAmnt, 1 / exchangeRate, unix, tx.hash] );
 
-    });
-  });
+    } );
+  } );
 }

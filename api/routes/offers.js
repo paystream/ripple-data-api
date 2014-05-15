@@ -25,8 +25,8 @@ var winston = require('winston'),
     "base"  : {"currency": "XRP"},
     "counter" : {"currency": "USD", "issuer" : "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B"},
     "startTime" : "Feb 10, 2014 4:44:00 am",
-    "endTime"   : "Feb 11, 2014 5:09:00 am",
-    "timeIncrement" : "hour",
+    "endTime"   : "Apr 16, 2014 5:09:00 am",
+    "timeIncrement" : "day",
     "format" : "json"
     
     }' http://localhost:5993/api/offers
@@ -87,7 +87,7 @@ function offers (params, callback) {
             counterAmount : row.value[3],
             price         : row.value[4],
             time          : moment.utc(row.value[5]).format(),
-            txHash        : row.value[6],
+            txHash        : row.key.pop(),
             ledgerIndex   : parseInt(row.id, 10)
           });
           
@@ -116,6 +116,7 @@ function offers (params, callback) {
       
         if (options.view.reduce === false) {
           value[5] = moment.utc(value[5]).format();
+          value.push(row.key.pop());
           value.push(parseInt(row.id, 10));
           
         } else {
