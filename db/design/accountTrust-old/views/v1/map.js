@@ -31,13 +31,13 @@ function( doc ) {
         highValue  = parseFloat(high.value, 10);
       
       if (lowValue && tx.Account==low.issuer) {      
-        emit([high.issuer].concat(timestamp).concat([tx.hash]), [low.issuer,  low.currency, lowValue,   unix]);
-        emit([low.issuer].concat(timestamp).concat([tx.hash]),  [high.issuer, low.currency, 0-lowValue, unix]);
+        emit([high.issuer].concat(timestamp), [low.issuer,  low.currency, lowValue,   unix, tx.hash]);
+        emit([low.issuer].concat(timestamp),  [high.issuer, low.currency, 0-lowValue, unix, tx.hash]);
       }
       
       if (highValue && tx.Account==high.issuer) {        
-        emit([high.issuer].concat(timestamp).concat([tx.hash]), [low.issuer,  low.currency, 0-highValue, unix]);
-        emit([low.issuer].concat(timestamp).concat([tx.hash]),  [high.issuer, low.currency, highValue,   unix]);
+        emit([high.issuer].concat(timestamp), [low.issuer,  low.currency, 0-highValue, unix, tx.hash]);
+        emit([low.issuer].concat(timestamp),  [high.issuer, low.currency, highValue,   unix, tx.hash]);
       }         
     });
   });
