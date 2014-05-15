@@ -16,6 +16,6 @@ function(doc) {
     //only include successful transactions
     if (tx.metaData.TransactionResult !== 'tesSUCCESS') return;
 
-    emit(timestamp.concat(tx.hash), [tx.TransactionType, tx.Account, unix]);
+    emit(timestamp, [tx.TransactionType, tx.Account, unix, tx.hash]);
   });
 }

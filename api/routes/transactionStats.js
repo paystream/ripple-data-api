@@ -149,7 +149,7 @@ function transactionStats(params, callback) {
             time        : moment.utc(d.value[2]).format(),
             type        : d.value[0],
             account     : d.value[1],
-            txHash      : d.value[3],
+            txHash      : d.key.pop(),
             ledgerIndex : parseInt(d.id, 10)
           });
         });
@@ -174,7 +174,7 @@ function transactionStats(params, callback) {
             moment.utc(rows[i].value[2]).format(), 
             rows[i].value[0], //type
             rows[i].value[1], //account
-            rows[i].value[3], //tx_hash 
+            rows[i].key.pop(), //tx_hash 
             parseInt(rows[i].id, 10) //ledger_index
           ]);
         }
