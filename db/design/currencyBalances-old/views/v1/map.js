@@ -33,7 +33,7 @@ function (doc) {
             
           balance  = balance / 1000000.0; //convert to XRP
          
-          emit(["XRP"].concat(timestamp).concat(tx.hash), [fields.Account, balance, change, unix]);
+          emit(["XRP"].concat(timestamp), [fields.Account, balance, change, unix, tx.hash]);
         } 
       
       } else if (node.LedgerEntryType === "RippleState") {
@@ -75,8 +75,8 @@ function (doc) {
           return;
         }
   
-        emit([currency+"."+lowParty].concat(timestamp).concat(tx.hash),  [highParty, balance, change, unix]);
-        emit([currency+"."+highParty].concat(timestamp).concat(tx.hash), [lowParty, (0 - balance), ( 0 - change ), unix]);            
+        emit([currency+"."+lowParty].concat(timestamp),  [highParty, balance, change, unix, tx.hash]);
+        emit([currency+"."+highParty].concat(timestamp), [lowParty, (0 - balance), ( 0 - change ), unix, tx.hash]);            
       } 
     });
   });
