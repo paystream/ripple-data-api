@@ -133,7 +133,7 @@ function accountTransactions(params, callback, unlimit) {
           amount       : value[3],
           counterparty : value[4],
           time         : moment.utc(value[5]).format(),
-          txHash       : value[6],
+          txHash       : row.key.pop(),
           ledgerIndex  : parseInt(row.id, 10),
         });
       });
@@ -180,7 +180,7 @@ function accountTransactions(params, callback, unlimit) {
             row.value[3],
             row.value[4],
             moment.utc(row.value[5]).format(),
-            row.value[6],
+            row.key.pop(),
             parseInt(row.id, 10),
           ]);
         });
