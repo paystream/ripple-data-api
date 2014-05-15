@@ -386,12 +386,13 @@ function valueSent(params, callback) {
       
       rows.forEach(function(row){
         if (viewOpts.reduce === false) {
+          var txHash = row.key.pop();
           response.results.push({
             time        : moment.utc(row.key.slice(2)).format(),
             amount      : row.value[0],
             account     : row.value[1],
             destination : row.value[2],
-            txHash      : row.value[3],
+            txHash      : txHash,
             ledgerIndex : parseInt(row.id, 10) 
           });
       
@@ -416,16 +417,16 @@ function valueSent(params, callback) {
       if (viewOpts.reduce === false) {
         header = header.concat(["account","destination","txHash","ledgerIndex"]);
         rows.forEach(function(row, index) {
-          var value = row.value;
-          var time  = row.key ? moment.utc(row.key.slice(2)) : startTime;
+          var value  = row.value;
+          var txHash = row.key ? row.key.pop() : null;
+          var time   = row.key ? moment.utc(row.key.slice(2)) : startTime;
           value.unshift(time.format());
+          value.push(txHash);
           if (row.id) value.push(parseInt(row.id, 10));
           rows[index] = value;
         });  
                  
-      } else {
-        header.push("count");
-      }
+      } 
       
       rows.unshift(header);  
       

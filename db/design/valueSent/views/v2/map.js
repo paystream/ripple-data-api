@@ -25,7 +25,7 @@ function(doc) {
     
     if (changes.length > 0) {
       changes.forEach(function(change){
-        emit([change.currency, change.issuer].concat(timestamp), [0 - parseFloat(change.value), tx.hash]);
+        emit([change.currency, change.issuer].concat(timestamp).concat(tx.hash), [0 - parseFloat(change.value), tx.Account, tx.Destination || null]);
         //log(change);
       });
       
