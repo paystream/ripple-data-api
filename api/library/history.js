@@ -57,16 +57,14 @@ function saveHistory (metric, interval, done) {
 module.exports.init = function () {
   saveHistory('topMarkets', "month", function() {
     saveHistory('totalValueSent', "month", function() {
-      saveHistory('totalNetworkValue', "month", function() {
-        /*
+      saveHistory('totalNetworkValue', "month", function() {      
         saveHistory('topMarkets', "day", function() {
           saveHistory('totalValueSent', "day", function() {
             saveHistory('totalNetworkValue', "day", function() {  
               winston.info("finished cacheing historical metrics");     
             });    
           });
-        });
-        */    
+        }); 
       });    
     });
   });

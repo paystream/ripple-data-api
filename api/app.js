@@ -65,6 +65,7 @@ var apiRoutes = {
   'accountoffersexercised'  : require("./routes/accountOffersExercised"),
   'accounttrust'            : require("./routes/accountTrust"),
   'transactionstats'        : require("./routes/transactionStats"),
+  'historicalmetrics'       : require("./routes/historicalmetrics"),
   'ledgersclosed'           : require("./routes/ledgersClosed"),
 };
 
