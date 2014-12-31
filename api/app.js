@@ -1,9 +1,10 @@
-var env        = process.env.NODE_ENV || "development";
-var DBconfig   = require('../db.config.json')[env];
-var config     = require('../deployment.environments.json')[env];
-var StatsD     = require('node-statsd').StatsD;
-var http       = require('http');
-var https      = require('https');
+var env      = process.env.NODE_ENV || "development";
+var DBconfig = require('../db.config.json')[env];
+var config   = require('../deployment.environments.json')[env];
+var StatsD   = require('node-statsd').StatsD;
+var http     = require('http');
+var https    = require('https');
+var HBase    = require('./library/hbase/client');
 var maxSockets;
 
 var posix = require('posix');
@@ -35,8 +36,9 @@ statsd = new StatsD({
   cacheDns : true
 });
 
-
-db = require('./library/couchClient')({
+//global hbase client
+hbase = new HBase(config.hbase).connect();
+db    = require('./library/couchClient')({
   url : DBconfig.protocol+
     '://' + DBconfig.username + 
     ':'   + DBconfig.password + 
